@@ -1,73 +1,51 @@
-<!DOCTYPE html>
-<?php echo "<html>"; ?>
+<?php
+function showRegisterContent()
+{
 
-<?php echo "<head>"; ?>
-<?php echo "<title>Register</title>"; ?>
-<link rel="stylesheet" href="./CSS/stylesheet.css">
-<?php echo "</head>"; ?>
-
-<?php echo "<body>"; ?>
-<?php echo "<h1>Register</h1>"; ?>
-
-<div class="text">
-  <nav>
-    <ul class="menu">
-      <li><a href="index.php?page=home">Home</a></li>
-      <li><a href="index.php?page=about">About</a></li>
-      <li><a href="index.php?page=contact">Contact</a></li>
-      <?php if (isset($_SESSION['user'])) : ?>
-        <li><a href="index.php?page=logout">Logout [<?php echo htmlspecialchars($_SESSION['user']['logname']); ?>]</a></li>
-        <li><a href="index.php?page=change_password">Change Password</a></li>
-      <?php else : ?>
-        <li><a href="index.php?page=register">Register</a></li>
-        <li><a href="index.php?page=login">Login</a></li>
-      <?php endif; ?>
-    </ul>
-  </nav>
-  <?php if (!isset($registerResult['regvalid']) || !$registerResult['regvalid']) { /* Show the next part only when $valid is false */
+  // if (!isset($registerResult['regvalid']) || !$registerResult['regvalid']) { /* Show the next part only when $valid is false */
     // Extract form data for convenience
-    $registerData = $registerResult['registerData'] ?? []; ?>
-    <div class="formcarry-container">
-      <form action="index.php" method="POST" class="formcarry-form">
-        <!-- Hidden field to identify the register form -->
-        <input type="hidden" name="form_type" value="register">
-        <div class="input">
-          <?php echo "<br>"; ?>
-          <?php echo "<br>"; ?>
-          <label for="name">Name</label>
-          <input type="text" id="regname" name="regname" value="<?php echo htmlspecialchars($registerData['regname'] ?? '');
-                                                                ?>" />
-          <span class="error">*<?php echo $registerResult['errors']['regnameErr'] ?? '';
-                                ?></span>
-          <?php echo "<br>"; ?>
-          <?php echo "<br>"; ?>
-          <label for="email">Email Address</label>
-          <input type="email" id="regemail" name="regemail" value="<?php echo htmlspecialchars($registerData['regemail'] ?? '');
-                                                                    ?>" />
-          <span class="error">*<?php echo $registerResult['errors']['regemailErr'] ?? '';
-                                ?></span>
-          <?php echo "<br>"; ?>
-          <?php echo "<br>"; ?>
-          <label for="phone">Password</label>
-          <input type="password" id="regpassword1" name="regpassword1" />
-          <span class="error">*<?php echo $registerResult['errors']['regpassword1Err'] ?? '';
-                                ?></span>
-          <?php echo "<br>"; ?>
-          <?php echo "<br>"; ?>
-          <label for="phone">Repeat Password</label>
-          <input type="password" id="regpassword2" name="regpassword2" />
-          <span class="error">*<?php echo $registerResult['errors']['regpassword2Err'] ?? '';
-                                ?></span>
-          <?php echo "<br>"; ?>
-          <?php echo "<br>"; ?>
-          <button type="Submit">Send</button>
-      </form>
-    <?php } ?>
-    </div>
-</div>
-<?php echo "</body>
-<footer>
-<p>&copy;Amr Adwan 2023</p>
-</footer>
-
-</html>"; ?>
+    // $registerData = $registerResult['registerData'] ?? [];
+    echo "<div class=\"formcarry-container\">";
+    echo "<form action=\"index.php\" method=\"POST\" class=\"formcarry-form\">";
+    echo "<!-- Hidden field to identify the register form -->";
+    echo "<input type=\"hidden\" name=\"form_type\" value=\"register\">";
+    echo "<div class=\"input\">";
+    echo "<br>";
+    echo "<br>";
+    echo "<label for=\"name\">Name</label>";
+    echo "<input type=\"text\" id=\"regname\" name=\"regname\" value=\"";
+    // echo htmlspecialchars($registerData['regname'] ?? '');
+    echo "\" />";
+    echo "<span class=\"error\">*";
+    // echo $registerResult['errors']['regnameErr'] ?? '';
+    echo "</span>";
+    echo "<br>";
+    echo "<br>";
+    echo "<label for=\"email\">Email Address</label>";
+    echo "<input type=\"email\" id=\"regemail\" name=\"regemail\" value=\"";
+    // echo htmlspecialchars($registerData['regemail'] ?? '');
+    echo "\" />";
+    echo "<span class=\"error\">*";
+    // echo $registerResult['errors']['regemailErr'] ?? '';
+    echo "</span>";
+    echo "<br>";
+    echo "<br>";
+    echo "<label for=\"phone\">Password</label>";
+    echo "<input type=\"password\" id=\"regpassword1\" name=\"regpassword1\" />";
+    echo "<span class=\"error\">*";
+    // echo $registerResult['errors']['regpassword1Err'] ?? '';
+    echo "</span>";
+    echo "<br>";
+    echo "<br>";
+    echo "<label for=\"phone\">Repeat Password</label>";
+    echo "<input type=\"password\" id=\"regpassword2\" name=\"regpassword2\" />";
+    echo "<span class=\"error\">*";
+    // echo $registerResult['errors']['regpassword2Err'] ?? '';
+    echo "</span>";
+    echo "<br>";
+    echo "<br>";
+    echo "<button type=\"Submit\">Send</button>";
+    echo "</form>";
+  }
+// }
+?>
