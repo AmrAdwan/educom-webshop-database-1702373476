@@ -1,9 +1,14 @@
 <?php
-function showLoginContent()
+// include ("validations.php");
+function getErrorLogin($loginResult, $key)
 {
-  // if (!isset($loginResult['logvalid']) || !$loginResult['logvalid']) { /* Show the next part only when $valid is false */
+  return isset($loginResult['errors'][$key]) ? $loginResult['errors'][$key] : '';
+}
+function showLoginForm($loginResult)
+{
+  if (!isset($loginResult['valid']) || !$loginResult['valid']) { /* Show the next part only when $valid is false */
     // Extract form data for convenience
-    // $loginData = $loginResult['loginData'] ?? [];
+    $loginData = $loginResult['loginData'] ?? [];
     echo "<div class=\"formcarry-container\">";
     echo  "<form action=\"index.php\" method=\"POST\" class=\"formcarry-form\">";
     echo  "<!-- Hidden field to identify the login form -->";
@@ -12,18 +17,17 @@ function showLoginContent()
     echo "<br>";
     echo "<br>";
     echo "<label for=\"email\">Email Address</label>";
-    echo "<input type=\"email\" id=\"logemail\" name=\"logemail\" value=\"";
-    // echo htmlspecialchars($loginData['logemail'] ?? '');
+    echo "<input type=\"email\" id=\"logemail\" name=\"logemail\" value=\"" . $loginData['logemail'] ?? '' . "\" />";
     echo "\" />";
     echo "<span class=\"error\">*"; 
-    // echo $loginResult['errors']['logemailErr'] ?? '';
+    echo getErrorLogin($loginResult, 'logemail');
     echo "</span>";
     echo "<br>";
     echo "<br>";
     echo "<label for=\"password\">Password</label>";
     echo "<input type=\"password\" id=\"logpassword\" name=\"logpassword\" />";
     echo "<span class=\"error\">*"; 
-    // echo $loginResult['errors']['logpasswordErr'] ?? ''; 
+    echo getErrorLogin($loginResult, 'logpassword');
     echo "</span>";
     echo "<br>";
     echo "<br>";
@@ -31,5 +35,5 @@ function showLoginContent()
     echo "</form>";
     echo "</div>";
   }
-// }
+}
 ?>

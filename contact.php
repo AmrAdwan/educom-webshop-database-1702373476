@@ -1,10 +1,10 @@
 <?php
 
-function getError($formResult, $key)
+function getErrorContact($formResult, $key)
 {
   return isset($formResult['errors'][$key]) ? $formResult['errors'][$key] : '';
 }
-function showContactContent($formResult)
+function showContactForm($formResult)
 {
   if (!isset($formResult['valid']) || !$formResult['valid'])
   { /* Show the next part only when $valid is false */
@@ -32,7 +32,7 @@ function showContactContent($formResult)
     echo ">Other</option>";
     echo "</select>";
     echo "<span class=\"error\">*";
-    echo getError($formResult, 'gender');
+    echo getErrorContact($formResult, 'gender');
     echo "</span>";
     echo "</span>";
     echo "<br>";
@@ -42,7 +42,7 @@ function showContactContent($formResult)
     echo "<input type=\"text\" id=\"name\" name=\"name\" value=\"" . $formData['name'] ?? '' . "\" />";
     echo "\" />";
     echo "<span class=\"error\">*";
-    echo getError($formResult, 'name');
+    echo getErrorContact($formResult, 'name');
     echo "</span>";
     echo "<br>";
     echo "<br>";
@@ -50,7 +50,7 @@ function showContactContent($formResult)
     echo "<input type=\"email\" id=\"email\" name=\"email\" value=\"" . $formData['email'] ?? '' . "\" />";
     echo "\"  />";
     echo "<span class=\"error\">";
-    echo getError($formResult, 'email');
+    echo getErrorContact($formResult, 'email');
     echo "</span>";
     echo "<br>";
     echo "<br>";
@@ -58,7 +58,7 @@ function showContactContent($formResult)
     echo "<input type=\"tel\" id=\"phone\" name=\"phone\" value=\"" . $formData['phone'] ?? '' . "\" />";
     echo "\" />";
     echo "<span class=\"error\">";
-    echo getError($formResult, 'phone');
+    echo getErrorContact($formResult, 'phone');
     echo "</span>";
     echo "<br>";
     echo "<br>";
@@ -67,7 +67,7 @@ function showContactContent($formResult)
     echo "<input autocomplete=\"address-line1\" type=\"text\" id=\"street\" name=\"street\" value=\"" . $formData['street'] ?? '' . "\" />";
     echo "\">";
     echo "<span class=\"error\">";
-    echo getError($formResult, 'street');
+    echo getErrorContact($formResult, 'street');
     echo "</span>";
     echo "<br>";
     echo "<br>";
@@ -75,7 +75,7 @@ function showContactContent($formResult)
     echo "<input autocomplete=\"address-line1\" type=\" number\" id=\"housenumber\" name=\"housenumber\" value=\"" . $formData['housenumber'] ?? '' . "\" />";
     echo "\">";
     echo "<span class=\"error\">";
-    echo getError($formResult, 'housenumber');
+    echo getErrorContact($formResult, 'housenumber');
     echo "</span>";
     echo "<br>";
     echo "<br>";
@@ -89,7 +89,7 @@ function showContactContent($formResult)
     echo "<input autocomplete=\"postal-code\" type=\"text\" id=\"zip\" name=\"zip\" value=\"" . $formData['zipcode'] ?? '' . "\" />";
     echo "\">";
     echo "<span class=\"error\">";
-    echo getError($formResult, 'zipcode');
+    echo getErrorContact($formResult, 'zipcode');
     echo "</span>";
     echo "</div>"; // Close the <div> for 'zip'
     echo "<br>";
@@ -98,7 +98,7 @@ function showContactContent($formResult)
     echo "<input autocomplete=\"address-level2\" type=\"text\" id=\"city\" name=\"city\" value=\"" . $formData['city'] ?? '' . "\" />";
     echo "\">";
     echo "<span class=\"error\">";
-    echo getError($formResult, 'city');
+    echo getErrorContact($formResult, 'city');
     echo "</span>";
     echo "</div>"; // Close the <div> for 'city'
     echo "<br>";
@@ -107,7 +107,7 @@ function showContactContent($formResult)
     echo "<input autocomplete=\"address-level1\" type=\"text\" id=\"province\" name=\"province\" value=\"" . $formData['province'] ?? '' . "\" />";
     echo "\">";
     echo "<span class=\"error\">";
-    echo getError($formResult, 'province');
+    echo getErrorContact($formResult, 'province');
     echo "</span>";
     echo "</div>"; // Close the <div> for 'province'
     echo "<br>";
@@ -116,7 +116,7 @@ function showContactContent($formResult)
     echo "<input autocomplete=\"country\" type=\"text\" id=\"country\" name=\"country\" value=\"" . $formData['country'] ?? '' . "\" />";
     echo "\">";
     echo "<span class=\"error\">";
-    echo getError($formResult, 'country');
+    echo getErrorContact($formResult, 'country');
     echo "</span>";
     echo "</div>"; // Close the <div> for 'country'
     echo "<br>";
@@ -125,7 +125,7 @@ function showContactContent($formResult)
     echo "<textarea name=\"message\" id=\"message\" cols=\"30\" rows=\"10\" value=\"" . $formData['message'] ?? '' . "\" />";
     echo "\"></textarea>";
     echo "<span class=\"error\">*";
-    echo getError($formResult, 'message');
+    echo getErrorContact($formResult, 'message');
     echo "</span>";
     echo "<br>";
     echo "<br>";
@@ -148,7 +148,7 @@ function showContactContent($formResult)
     echo " />";
     echo "<label for=\"contactChoice3\">Post</label>";
     echo "<span class=\"error\">*";
-    echo getError($formResult, 'contact');
+    echo getErrorContact($formResult, 'contact');
     echo "</span>";
     echo "</div>"; // Close the <div> for 'fieldset'
     echo "</fieldset>";
@@ -158,64 +158,65 @@ function showContactContent($formResult)
     echo "<button type=\"Submit\">Send</button>";
     echo "</form>";
     echo "</div>"; // Close the <div> for 'formcarry-container'
-  } else
-  { /* Show the next part only when $valid is true */
-    $formData = $formResult['formData'] ?? [];
-    echo "<p>Thank you for your submission:</p>";
-    echo "<h2>Your input:</h2>";
-    echo "<br>";
-    echo "<div>Gender: ";
-    echo $formData['gender'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Name:  ";
-    echo $formData['name'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Email:  ";
-    echo $formData['email'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Phone number:  ";
-    echo $formData['phone'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Street:  ";
-    echo $formData['street'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>House number:  ";
-    echo $formData['housenumber'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Addition:  ";
-    echo $formData['addition'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Zip code:  ";
-    echo $formData['zipcode'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>City  ";
-    echo $formData['city'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Province:  ";
-    echo $formData['province'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Country:  ";
-    echo $formData['country'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Message:  ";
-    echo $formData['message'];
-    echo "</div>";
-    echo "<br>";
-    echo "<div>Contact method:  ";
-    echo $formData['contact'];
-    echo "</div>";
-    // } /* End of conditional showing */
-    echo "</div>"; // Close the <div> for 'formcarry-container'
   }
 }
+// function showContactThanks($formResult)
+// { /* Show the next part only when $valid is true */
+//   $formData = $formResult['formData'] ?? [];
+//   echo "<p>Thank you for your submission:</p>";
+//   echo "<h2>Your input:</h2>";
+//   echo "<br>";
+//   echo "<div>Gender: ";
+//   echo $formData['gender'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Name:  ";
+//   echo $formData['name'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Email:  ";
+//   echo $formData['email'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Phone number:  ";
+//   echo $formData['phone'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Street:  ";
+//   echo $formData['street'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>House number:  ";
+//   echo $formData['housenumber'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Addition:  ";
+//   echo $formData['addition'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Zip code:  ";
+//   echo $formData['zipcode'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>City  ";
+//   echo $formData['city'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Province:  ";
+//   echo $formData['province'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Country:  ";
+//   echo $formData['country'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Message:  ";
+//   echo $formData['message'];
+//   echo "</div>";
+//   echo "<br>";
+//   echo "<div>Contact method:  ";
+//   echo $formData['contact'];
+//   echo "</div>";
+// } /* End of conditional showing */
+// echo "</div>";
+?>
