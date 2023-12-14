@@ -27,6 +27,10 @@ function getVar($key, $default = '')
   }
   return $default;
 }
+
+
+
+
 function validateLogin()
 {
   $loginData = [
@@ -34,9 +38,9 @@ function validateLogin()
     'logpassword' => '',
   ];
   $errors = [];
-  $name = '';
+  $name = $id = '';
 
-  $valid = false;
+  $logvalid = false;
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST')
   {
@@ -62,9 +66,11 @@ function validateLogin()
       $user = authenticateUser($loginData['logemail'], $loginData['logpassword']);
       if ($user)
       {
-        $_SESSION['user_name'] = ['logemail' => $loginData['logemail'], 'logname' => $user['name']];
+        $_SESSION['user_name'] = ['email' => $loginData['logemail'], 'logname' => $user['name'], 'id' => $user['id']];
         $name = $user['name'];
-        $valid = true;
+        $id = $user['id'];
+
+        $logvalid = true;
       } else
       {
         if (!doesEmailExist($loginData['logemail']))
@@ -77,8 +83,9 @@ function validateLogin()
     }
   }
   return [
-    'valid' => $valid,
+    'logvalid' => $logvalid,
     'name' => $name,
+    'id' => $id,
     'errors' => $errors,
     'loginData' => $loginData
   ];
@@ -94,7 +101,7 @@ function validateRegister()
   ];
   $errors = [];
 
-  $valid = false;
+  $regvalid = false;
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST')
   {
@@ -134,15 +141,15 @@ function validateRegister()
     if (empty($errors))
     {
       // Use storeUser function from user_service.php
-      $valid = storeUser($registerData['regemail'], $registerData['regname'], $registerData['regpassword1']);
-      if (!$valid)
+      $regvalid = storeUser($registerData['regemail'], $registerData['regname'], $registerData['regpassword1']);
+      if (!$regvalid)
       {
         $errors['regemail'] = "Email already exists!";
       }
     }
   }
   return [
-    'valid' => $valid,
+    'regvalid' => $regvalid,
     'errors' => $errors,
     'registerData' => $registerData
   ];
@@ -247,7 +254,7 @@ function validateChangePassword()
     'confirm_new_password' => '',
   ];
   $errors = [];
-  $valid = false;
+  $changevalid = false;
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST')
   {
@@ -276,7 +283,10 @@ function validateChangePassword()
   }
   if (empty($errors))
   {
-    $email = $_SESSION['user_name']['logemail'];
+
+    $id = $_SESSION['user_id'];
+    $email = findEmailById($id);
+
     $user = findUserByEmail($email);
 
     if ($user && password_verify($changeData['old_password'], $user['password']))
@@ -284,7 +294,7 @@ function validateChangePassword()
       // Update password
       $hashedPassword = password_hash($changeData['new_password'], PASSWORD_DEFAULT);
       $updateSuccess = updateUserPassword($email, $hashedPassword);
-      $valid = $updateSuccess;
+      $changevalid = $updateSuccess;
     } else
     {
       $errors['old_password'] = 'Incorrect old password.';
@@ -292,7 +302,7 @@ function validateChangePassword()
   }
 
   return [
-    'valid' => $valid,
+    'changevalid' => $changevalid,
     'errors' => $errors,
     'changeData' => $changeData
   ];

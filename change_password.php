@@ -6,11 +6,12 @@ function getErrorChangePassword($changeResult, $key)
 }
 function showChangePasswordForm($changeResult)
 {
-  if (!isset($changeResult['valid']) || !$changeResult['valid']) { /* Show the next part only when $valid is false */
+  if (!isset($changeResult['changevalid']) || !$changeResult['changevalid'])
+  { /* Show the next part only when $valid is false */
     echo "<br>";
-    
+
     echo "<div class=\"formcarry-container\">";
-    echo  "<form action=\"index.php\" method=\"post\" class=\"formcarry-form\">";
+    echo "<form action=\"index.php\" method=\"post\" class=\"formcarry-form\">";
     echo "<!-- Hidden field to identify the change_password form -->";
     echo "<input type=\"hidden\" name=\"form_type\" value=\"change_password\">";
     echo "<label for=\"old_password\">Old Password:</label>";

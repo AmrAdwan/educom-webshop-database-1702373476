@@ -1,10 +1,11 @@
 <?php
 session_start();
 
-function doLoginUser($name)
+function doLoginUser($id, $name)
 {
   // Set session variables for the logged-in user
   $_SESSION['user_logged_in'] = true;
+  $_SESSION['user_id'] = $id;
   $_SESSION['user_name'] = $name;
 }
 

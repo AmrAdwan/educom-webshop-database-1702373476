@@ -7,7 +7,7 @@ function getErrorRegister($registerResult, $key)
 function showRegisterForm($registerResult)
 {
 
-  if (!isset($registerResult['valid']) || !$registerResult['valid']) { /* Show the next part only when $valid is false */
+  if (!isset($registerResult['regvalid']) || !$registerResult['regvalid']) { /* Show the next part only when $valid is false */
     // Extract form data for convenience
     $registerData = $registerResult['registerData'] ?? [];
     echo "<div class=\"formcarry-container\">";
