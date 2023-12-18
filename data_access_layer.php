@@ -91,6 +91,81 @@ function saveUser($email, $name, $password)
   return $success;
 }
 
+function getProducts()
+{
+  global $conn;
+  $sql = "SELECT * FROM products";
+  $stmt = mysqli_prepare($conn, $sql);
+
+  if (!mysqli_stmt_execute($stmt))
+  {
+    // Handle error in statement execution
+    die('Execute failed: ' . mysqli_error($conn));
+  }
+
+  $result = mysqli_stmt_get_result($stmt);
+
+  $products = [];
+  while ($row = mysqli_fetch_assoc($result))
+  {
+    $products[] = [
+      'id' => $row['id'],
+      'name' => $row['name'],
+      'description' => $row['description'],
+      'price' => $row['price'],
+      'file_name' => $row['file_name']
+    ];
+  }
+
+  mysqli_free_result($result);
+  mysqli_stmt_close($stmt);
+
+  return $products;
+}
+
+
+function getProductById($id)
+{
+  global $conn;
+
+  if (!$conn)
+  {
+    die("Database connection error: " . mysqli_connect_error());
+  }
+
+  $sql = "SELECT * FROM products WHERE id = ?";
+  $stmt = mysqli_prepare($conn, $sql);
+
+  if (!$stmt)
+  {
+    die("Error preparing statement: " . mysqli_error($conn));
+  }
+
+  mysqli_stmt_bind_param($stmt, "i", $id);
+
+  if (!mysqli_stmt_execute($stmt))
+  {
+    die("Error executing query: " . mysqli_stmt_error($stmt));
+  }
+
+  $result = mysqli_stmt_get_result($stmt);
+
+  if (!$result)
+  {
+    die("Error fetching result: " . mysqli_error($conn));
+  }
+
+  $product = mysqli_fetch_assoc($result);
+
+  mysqli_free_result($result);
+  mysqli_stmt_close($stmt);
+  // var_dump($product);
+  return $product;
+}
+
+
+
+
 // Close the database connection at the end of the script
 // $conn->close();
 ?>

@@ -11,6 +11,8 @@ include 'thanks.php';
 include 'change_password.php';
 include 'validations.php';
 include 'session_manager.php';
+include 'webshop.php';
+include 'product_details.php';
 
 
 function processRequest($page)
@@ -43,15 +45,25 @@ function processRequest($page)
         $page = 'login';
       }
       break;
+    case 'product_details':
+      if (isset($_POST['product_id']))
+      {
+        $productId = $_POST['product_id'];
+        $product = getProductById($productId);
+        if ($product)
+        {
+          $data['product'] = $product;
+          $page = 'product_details';
+        }
+      }
+      break;
     case 'change_password':
       $data = validateChangePassword();
       if ($data['changevalid'])
       {
-        // echo "<p>Password changed successfully.</p>";
         echo "<script>alert('Password changed successfully!');</script>";
         $page = 'home';
-      }
-      else
+      } else
         echo "<script>alert('Failure!');</script>";
       break;
   }
@@ -94,6 +106,12 @@ function showHeadSection($data)
     case 'change_password':
       echo "Change Password";
       break;
+    case 'webshop':
+      echo 'Webshop';
+      break;
+    case 'product_details':
+      echo 'Product Details';
+      break;
     default:
       echo "404 Not Found";
       echo "</title>";
@@ -135,100 +153,18 @@ function showHeader($data)
     case 'change_password':
       echo "Change Password";
       break;
+    case 'webshop':
+      echo "Webshop";
+      break;
+    case 'product_details':
+      echo 'Product Details';
+      break;
     default:
       echo '404 Page Not Found';
       break;
   }
   echo "</h1>";
 }
-// {
-//   echo "<nav>
-//     <ul class=\"menu\">
-//     <li><a href=\"index.php?page=home\">Home</a></li>
-//     <li><a href=\"index.php?page=about\">About</a></li>
-//     <li><a href=\"index.php?page=contact\">Contact</a></li>";
-
-//   if (isset($_SESSION['user']))
-//   {
-//     echo "<li><a href=\"index.php?page=logout\">Logout[";
-//     echo $_SESSION['user']['logname'] . "]";
-//     echo "</a></li>";
-//     echo "<li><a href=\"index.php?page=change_password\">Change Password</a></li>";
-//   } else
-//   {
-//     echo "<li><a href=\"index.php?page=register\">Register</a></li>
-//       <li><a href=\"index.php?page=login\">Login</a></li>";
-//   }
-//   ;
-//   echo "</ul>
-// </nav>";
-// }
-
-
-
-// function showContent($page)
-// {
-//   echo "<div class=\"text\">";
-//   switch ($page)
-//   {
-//     case 'home':
-//       include('home.php');
-//       showHomeContent();
-//       break;
-//     case 'about':
-//       include('about.php');
-//       showAboutContent();
-//       break;
-//     case 'contact':
-//       $formResult = validateContact();
-//       include('contact.php');
-//       showContactContent($formResult);
-//       break;
-//     case 'register':
-//       $registerResult = validateRegister();
-//       include('register.php');
-//       showRegisterContent($registerResult);
-//       if ($registerResult['regvalid'])
-//       {
-//         $_SESSION['registration_success'] = true;
-//         include('login.php');
-//         showLoginContent($loginResult);
-//       }
-//       break;
-//     case 'login':
-//       $loginResult = validateLogin();
-//       include('login.php');
-//       showLoginContent($loginResult);
-//       if ($loginResult['logvalid'])
-//       {
-//         include 'home.php';
-//         showHomeContent();
-//       }
-//       break;
-//     case 'logout':
-//       session_destroy();
-//       session_start();
-//       include('home.php');
-//       showHomeContent();
-//       break;
-//     case 'change_password':
-//       $changeResult = validateChangePassword();
-//       include('change_password.php');
-//       showChangePasswordContent($changeResult);
-//       if ($changeResult['changevalid'])
-//       {
-//         echo "<p>Password changed successfully.</p>";
-//         include('home.php');  // Redirect to home after successful change
-//         showHomeContent();
-//       }
-//       break;
-//     default:
-//       include('404.php');
-//       show404Content();
-//       break;
-//   }
-//   echo "</div>";
-// }
 
 function showContent($data)
 {
@@ -254,6 +190,15 @@ function showContent($data)
       break;
     case 'change_password':
       showChangePasswordForm($data);
+      break;
+    case 'webshop':
+      showWebshopContent();
+      break;
+    case 'product_details':
+      if (isset($data['product']))
+      {
+        showProductDetails($data['product']);
+      }
       break;
     default:
       show404Content();
@@ -292,7 +237,7 @@ function showHtmlEnd()
 function getRequestedPage()
 {
   // A list of allowed pages
-  $allowedPages = ['home', 'about', 'contact', 'register', 'login', 'logout', 'change_password', 'thanks'];
+  $allowedPages = ['home', 'about', 'contact', 'register', 'login', 'logout', 'change_password', 'thanks', 'webshop', 'product_details'];
 
   // Check if it's a POST request
   if ($_SERVER['REQUEST_METHOD'] === 'POST')
@@ -313,6 +258,9 @@ function getRequestedPage()
       {
         return 'change_password';
       }
+    } elseif (isset($_POST['page']))
+    {
+      return $_POST['page'];
     }
   }
 
