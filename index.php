@@ -13,6 +13,7 @@ include 'validations.php';
 include 'session_manager.php';
 include 'webshop.php';
 include 'product_details.php';
+include 'shoppingcart.php';
 
 
 function processRequest($page)
@@ -55,6 +56,29 @@ function processRequest($page)
           $data['product'] = $product;
           $page = 'product_details';
         }
+      }
+      break;
+    case 'shoppingcart':
+      if (isset($_POST['product_id']))
+      {
+        // Function to add product to cart
+        addToCart($_POST['product_id']);
+      }
+      // Always show the shopping cart page, whether or not a new item was added
+      $page = 'shoppingcart';
+      $data['cart'] = getCartItems(); // Function to get items in the cart
+      break;
+    case 'update_cart':
+      if (isset($_POST['product_id']) && isset($_POST['quantity']))
+      {
+        updateCartQuantity($_POST['product_id'], $_POST['quantity']);
+      }
+      break;
+
+    case 'remove_from_cart':
+      if (isset($_POST['product_id']))
+      {
+        removeFromCart($_POST['product_id']);
       }
       break;
     case 'change_password':
@@ -112,6 +136,9 @@ function showHeadSection($data)
     case 'product_details':
       echo 'Product Details';
       break;
+    case 'shoppingcart':
+      echo 'Shopping Cart';
+      break;
     default:
       echo "404 Not Found";
       echo "</title>";
@@ -159,6 +186,9 @@ function showHeader($data)
     case 'product_details':
       echo 'Product Details';
       break;
+    case 'shoppingcart':
+      echo 'Shopping Cart';
+      break;
     default:
       echo '404 Page Not Found';
       break;
@@ -200,6 +230,12 @@ function showContent($data)
         showProductDetails($data['product']);
       }
       break;
+    case 'shoppingcart':
+      if (isset($data['cart']))
+      {
+        showshoppingcartContent($data['cart']);
+      }
+      break;
     default:
       show404Content();
       break;
@@ -237,7 +273,8 @@ function showHtmlEnd()
 function getRequestedPage()
 {
   // A list of allowed pages
-  $allowedPages = ['home', 'about', 'contact', 'register', 'login', 'logout', 'change_password', 'thanks', 'webshop', 'product_details'];
+  $allowedPages = ['home', 'about', 'contact', 'register', 'login', 'logout',
+    'change_password', 'thanks', 'webshop', 'product_details', 'shoppingcart'];
 
   // Check if it's a POST request
   if ($_SERVER['REQUEST_METHOD'] === 'POST')

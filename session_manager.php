@@ -46,6 +46,7 @@ function showMenu()
 
   if (isUserLoggedIn())
   {
+    echo "<li><a href=\"index.php?page=shoppingcart\">ShoppingCart</a></li>";
     echo "<li><a href=\"index.php?page=logout\">Logout[";
     echo getLoggedInUserName()."]";
     echo "</a></li>";
