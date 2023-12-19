@@ -16,7 +16,10 @@ function showshoppingcartContent()
   foreach ($cartItems as $item)
   {
     echo "<div class='cart-item'>";
-    echo "<img src='Images/" . $item['file_name'] . "' alt='" . $item['name'] . "' style='width: 100px;' />";
+    echo "<a href='index.php?page=product_details&product_id=" . $item['id'] . "' style='cursor: pointer;'>";
+    echo "<img src='Images/" . $item['file_name'] . "' alt='" . $item['name'] . "' style='width: 25%;' />";
+    echo "</a>";
+
     echo "<h3>" . $item['name'] . "</h3>";
     echo "<p>Price: $" . $item['price'] . "</p>";
     echo "<p>Quantity: " . $item['quantity'] . "</p>";
@@ -158,7 +161,7 @@ function processCheckout() {
 
   if ($orderPlaced) {
       // echo "<script>alert('Hello!');</script>";
-      echo '<script language="javascript">alert("message");</script>';
+      echo '<script language="javascript">alert("Order Placed Successfully! Thank you for your order!");</script>';
       $_SESSION['cart'] = []; // Empty the cart
   }
 }

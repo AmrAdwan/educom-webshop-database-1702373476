@@ -48,9 +48,9 @@ function processRequest($page)
       }
       break;
     case 'product_details':
-      if (isset($_POST['product_id']))
+      if (isset($_GET['product_id']))
       {
-        $productId = $_POST['product_id'];
+        $productId = $_GET['product_id'];
         $product = getProductById($productId);
         if ($product)
         {

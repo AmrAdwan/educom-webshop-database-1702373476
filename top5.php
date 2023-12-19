@@ -12,7 +12,9 @@ function showTop5Content()
     echo "<br>";
     echo "<br>";
     // echo "<div class='product'>";
-    echo "<img src='Images/" . $product['file_name'] . "' alt='" . $product['name'] . "' style='width: 50%;' />";
+    echo "<a href='index.php?page=product_details&product_id=" . $product['id'] . "' style='cursor: pointer;'>";
+    echo "<img src='Images/" . $product['file_name'] . "' alt='" . $product['name'] . "' style='width: 45%;' />";
+    echo "</a>";
     echo "<h3>" . $product['name'] . "</h3>";
     echo "<p>Total Sold: " . $product['total_quantity'] . "</p>";
     echo "</div>";

@@ -17,7 +17,6 @@ function showProductDetails($product)
       echo "<form action='index.php' method='post' onsubmit='redirectToCart()'>";
       echo "<input type='hidden' name='page' value='shoppingcart'>";
       echo "<input type='hidden' name='product_id' value='" . $product['id'] . "'>";
-      // echo "<input type='submit' value='Add to Cart'>";
       echo "<button style=\"font-size:16px\"><i class=\"fa fa-shopping-cart\"> Add to Cart</i></button>";
       echo "</form>";
 
