@@ -24,43 +24,45 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `orders`
+-- Tabelstructuur voor tabel `orderlines`
 --
 
-CREATE TABLE `orders` (
+CREATE TABLE `orderlines` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `order_date` datetime NOT NULL,
-  `order_nr` int(11) NOT NULL
+  `orders_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity_per_product` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Gegevens worden geëxporteerd voor tabel `orders`
+-- Gegevens worden geëxporteerd voor tabel `orderlines`
 --
 
-INSERT INTO `orders` (`id`, `user_id`, `order_date`, `order_nr`) VALUES
-(51, 1, '2023-12-19 14:15:22', 1),
-(52, 1, '2023-12-19 14:16:51', 2),
-(53, 1, '2023-12-19 14:17:48', 3),
-(54, 1, '2023-12-19 14:23:14', 4),
-(55, 1, '2023-12-19 14:25:08', 5),
-(56, 1, '2023-12-19 14:25:23', 6),
-(57, 1, '2023-12-19 14:33:46', 7),
-(58, 1, '2023-12-19 14:34:37', 8),
-(59, 1, '2023-12-19 14:43:27', 9),
-(60, 1, '2023-12-19 14:44:56', 10),
-(61, 1, '2023-12-19 14:45:37', 11),
-(62, 1, '2023-12-19 14:46:27', 12),
-(63, 1, '2023-12-19 14:46:40', 13);
+INSERT INTO `orderlines` (`id`, `orders_id`, `product_id`, `quantity_per_product`) VALUES
+(1, 51, 6, 1),
+(2, 51, 1, 1),
+(3, 52, 1, 1),
+(4, 52, 3, 1),
+(5, 53, 1, 3),
+(6, 54, 1, 1),
+(7, 55, 1, 1),
+(8, 56, 1, 1),
+(9, 57, 1, 1),
+(10, 58, 1, 1),
+(11, 59, 1, 1),
+(12, 60, 1, 1),
+(13, 61, 2, 2),
+(14, 62, 3, 1),
+(15, 63, 5, 1);
 
 --
 -- Indexen voor geëxporteerde tabellen
 --
 
 --
--- Indexen voor tabel `orders`
+-- Indexen voor tabel `orderlines`
 --
-ALTER TABLE `orders`
+ALTER TABLE `orderlines`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -68,10 +70,10 @@ ALTER TABLE `orders`
 --
 
 --
--- AUTO_INCREMENT voor een tabel `orders`
+-- AUTO_INCREMENT voor een tabel `orderlines`
 --
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+ALTER TABLE `orderlines`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

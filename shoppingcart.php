@@ -148,20 +148,20 @@ function calculateTotalPrice($cartItems)
 }
 
 
-function processCheckout()
-{
+function processCheckout() {
   $userId = $_SESSION['user_id'];
-
   $cartItems = getCartItems();
-  $totalPrice = calculateTotalPrice($cartItems);
+  // $totalPrice = calculateTotalPrice($cartItems);
 
   // Call insertOrder to save the order in the database
-  $orderPlaced = insertOrder($userId, $cartItems, $totalPrice);
+  $orderPlaced = insertOrder($userId, $cartItems);
 
-  if ($orderPlaced)
-  {
-    $_SESSION['cart'] = []; // Empty the cart
+  if ($orderPlaced) {
+      // echo "<script>alert('Hello!');</script>";
+      echo '<script language="javascript">alert("message");</script>';
+      $_SESSION['cart'] = []; // Empty the cart
   }
 }
+
 
 ?>

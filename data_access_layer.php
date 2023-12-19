@@ -49,7 +49,6 @@ function findEmailById($id)
 
   if (!$stmt)
   {
-    // Handle error in statement preparation
     die('Statement preparation failed: ' . mysqli_error($conn));
   }
 
@@ -57,7 +56,6 @@ function findEmailById($id)
 
   if (!mysqli_stmt_execute($stmt))
   {
-    // Handle error in statement execution
     die('Execute failed: ' . mysqli_error($conn));
   }
 
@@ -163,37 +161,49 @@ function getProductById($id)
   return $product;
 }
 
-function insertOrder($userId, $cartItems, $totalPrice)
+function insertOrder($userId, $cartItems)
 {
   global $conn;
 
-  $productNames = [];
-  $quantities = [];
-  foreach ($cartItems as $item)
+  // Start transaction
+  mysqli_begin_transaction($conn);
+
+  try
   {
-    $productNames[] = $item['name'];
-    $quantities[] = $item['quantity'];
-  }
-  $productNamesStr = implode(", ", $productNames);
-  $quantitiesStr = implode(", ", $quantities);
+    // Get the next order number
+    $result = mysqli_query($conn, "SELECT MAX(order_nr) as max_order_nr FROM orders");
+    $row = mysqli_fetch_assoc($result);
+    $nextOrderNr = $row['max_order_nr'] + 1;
 
-  $sql = "INSERT INTO orders (user_id, product_names, quantity_per_product, total_price) VALUES (?, ?, ?, ?)";
-  $stmt = mysqli_prepare($conn, $sql);
+    // Insert into orders table
+    $orderDate = date('Y-m-d H:i:s'); // Current date and time
+    $sqlOrder = "INSERT INTO orders (user_id, order_date, order_nr) VALUES (?, ?, ?)";
+    $stmtOrder = mysqli_prepare($conn, $sqlOrder);
+    mysqli_stmt_bind_param($stmtOrder, "isi", $userId, $orderDate, $nextOrderNr);
+    mysqli_stmt_execute($stmtOrder);
+    $orderId = mysqli_insert_id($conn); // Get the ID of the inserted order
+    mysqli_stmt_close($stmtOrder);
 
-  if (!$stmt)
+    // Insert into order_lines table
+    $sqlOrderLine = "INSERT INTO orderlines (orders_id, product_id, quantity_per_product) VALUES (?, ?, ?)";
+    foreach ($cartItems as $item)
+    {
+      $stmtOrderLine = mysqli_prepare($conn, $sqlOrderLine);
+      mysqli_stmt_bind_param($stmtOrderLine, "iii", $orderId, $item['id'], $item['quantity']);
+      mysqli_stmt_execute($stmtOrderLine);
+      mysqli_stmt_close($stmtOrderLine);
+    }
+
+    // Commit transaction
+    mysqli_commit($conn);
+    return true;
+  } catch (Exception $e)
   {
-    die('Statement preparation failed: ' . mysqli_error($conn));
+    // Rollback transaction on error
+    mysqli_rollback($conn);
+    return false;
   }
-
-  // Bind parameters and execute
-  mysqli_stmt_bind_param($stmt, "issd", $userId, $productNamesStr, $quantitiesStr, $totalPrice);
-
-  $success = mysqli_stmt_execute($stmt);
-  mysqli_stmt_close($stmt);
-
-  return $success;
 }
-
 
 // Close the database connection at the end of the script
 // $conn->close();
