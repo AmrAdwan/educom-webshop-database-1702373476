@@ -5,12 +5,12 @@ function showWebshopContent()
   $products = getProducts();
 
   // echo "<div class='products'>";
+  echo "<div class=\"row\">";
   echo "<br>";
   echo "<br>";
   foreach ($products as $product)
   {
     // echo "<div class='product'>";
-    echo "<div class=\"row\">";
     echo "<div class=\"column\">";
   // </div>
     echo "<br>";
@@ -45,7 +45,7 @@ function showWebshopContent()
     echo "</div>";
 
   }
-  // echo "</div>";
+  echo "</div>";
 }
 
 ?>
