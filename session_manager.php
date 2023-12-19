@@ -42,7 +42,8 @@ function showMenu()
     <li><a href=\"index.php?page=home\">Home</a></li>
     <li><a href=\"index.php?page=about\">About</a></li>
     <li><a href=\"index.php?page=contact\">Contact</a></li>
-    <li><a href=\"index.php?page=webshop\">Webshop</a></li>";
+    <li><a href=\"index.php?page=webshop\">Webshop</a></li>
+    <li><a href=\"index.php?page=top5\">Top 5</a></li>";
 
   if (isUserLoggedIn())
   {

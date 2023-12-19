@@ -21,7 +21,8 @@ function showWebshopContent()
     echo "<form action='index.php' method='post'>";
     echo "<input type='hidden' name='page' value='product_details'>";
     echo "<input type='hidden' name='product_id' value='" . $product['id'] . "'>";
-    echo "<input type='submit' value='View Details'>";
+    // echo "<input type='submit' value='View Details'>";
+    echo "<button style=\"font-size:12px\">View Details <i class=\"fa fa-info-circle\"></i></button>";
     echo "</form>";
     // echo "</div>";
     echo "<br>";
@@ -31,7 +32,8 @@ function showWebshopContent()
       echo "<form action='index.php' method='post' onsubmit='redirectToCart()'>";
       echo "<input type='hidden' name='page' value='shoppingcart'>";
       echo "<input type='hidden' name='product_id' value='" . $product['id'] . "'>";
-      echo "<input type='submit' value='Add to Cart'>";
+      // echo "<input type='submit' value='Add to Cart'>";
+      echo "<button style=\"font-size:12px\">Add to Cart <i class=\"fa fa-shopping-cart\"></i></button>";
       echo "</form>";
 
       echo "<script>

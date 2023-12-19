@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `orderlines` (
   `id` int(11) NOT NULL,
-  `orders_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `quantity_per_product` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

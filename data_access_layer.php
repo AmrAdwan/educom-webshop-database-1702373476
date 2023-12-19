@@ -185,7 +185,7 @@ function insertOrder($userId, $cartItems)
     mysqli_stmt_close($stmtOrder);
 
     // Insert into order_lines table
-    $sqlOrderLine = "INSERT INTO orderlines (orders_id, product_id, quantity_per_product) VALUES (?, ?, ?)";
+    $sqlOrderLine = "INSERT INTO orderlines (order_id, product_id, quantity_per_product) VALUES (?, ?, ?)";
     foreach ($cartItems as $item)
     {
       $stmtOrderLine = mysqli_prepare($conn, $sqlOrderLine);
@@ -204,6 +204,34 @@ function insertOrder($userId, $cartItems)
     return false;
   }
 }
+
+function getTop5Products()
+{
+  global $conn;
+
+  $sql = "SELECT p.id, p.name, p.file_name, SUM(ol.quantity_per_product) AS total_quantity
+          FROM orders o
+          JOIN orderlines ol ON o.id = ol.order_id
+          JOIN products p ON ol.product_id = p.id
+          WHERE o.order_date >= CURRENT_DATE - INTERVAL 7 DAY
+          GROUP BY p.id, p.name, p.file_name
+          ORDER BY total_quantity DESC
+          LIMIT 5";
+
+  $result = mysqli_query($conn, $sql);
+
+  if (!$result)
+  {
+    die("Error executing query: " . mysqli_error($conn));
+  }
+
+  $topProducts = mysqli_fetch_all($result, MYSQLI_ASSOC);
+  mysqli_free_result($result);
+
+  return $topProducts;
+}
+
+
 
 // Close the database connection at the end of the script
 // $conn->close();

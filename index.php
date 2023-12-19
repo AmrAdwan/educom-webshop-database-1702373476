@@ -14,6 +14,7 @@ include 'session_manager.php';
 include 'webshop.php';
 include 'product_details.php';
 include 'shoppingcart.php';
+include 'top5.php';
 
 
 function processRequest($page)
@@ -144,6 +145,9 @@ function showHeadSection($data)
     case 'shoppingcart':
       echo 'Shopping Cart';
       break;
+    case 'top5':
+      echo 'Top 5';
+      break;
     default:
       echo "404 Not Found";
       echo "</title>";
@@ -196,6 +200,9 @@ function showHeader($data)
     case 'shoppingcart':
       echo 'Shopping Cart';
       break;
+    case 'top5':
+      echo 'Top 5';
+      break;
     default:
       echo '404 Page Not Found';
       break;
@@ -243,6 +250,9 @@ function showContent($data)
         showshoppingcartContent();
       }
       break;
+    case 'top5':
+      showTop5Content();
+      break;
     default:
       show404Content();
       break;
@@ -281,7 +291,7 @@ function getRequestedPage()
 {
   // A list of allowed pages
   $allowedPages = ['home', 'about', 'contact', 'register', 'login', 'logout',
-    'change_password', 'thanks', 'webshop', 'product_details', 'shoppingcart'];
+    'change_password', 'thanks', 'webshop', 'product_details', 'shoppingcart', 'top5'];
 
   // Check if it's a POST request
   if ($_SERVER['REQUEST_METHOD'] === 'POST')
