@@ -36,7 +36,8 @@ function showshoppingcartContent()
     echo "<form onsubmit='handleSubmit(this); return false;' method='post'>";
     echo "<input type='hidden' name='page' value='remove_from_cart'>";
     echo "<input type='hidden' name='product_id' value='" . $item['id'] . "'>";
-    echo "<input type='submit' value='Remove Item'>";
+    // echo "<input type='submit' value='Remove Item'>";
+    echo "<button style=\"font-size:24px; color:red\" color><i class=\"material-icons\">delete</i></button>";
     echo "</form>";
 
     echo "<br>";

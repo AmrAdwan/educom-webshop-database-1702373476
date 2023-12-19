@@ -59,3 +59,17 @@ footer {
 .error {
   color: red;
 }
+
+
+.column {
+  float: left;
+  width: 40%;
+  padding: 15px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
