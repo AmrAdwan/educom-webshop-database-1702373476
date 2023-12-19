@@ -61,12 +61,10 @@ function processRequest($page)
     case 'shoppingcart':
       if (isset($_POST['product_id']))
       {
-        // Function to add product to cart
         addToCart($_POST['product_id']);
       }
-      // Always show the shopping cart page, whether or not a new item was added
       $page = 'shoppingcart';
-      $data['cart'] = getCartItems(); // Function to get items in the cart
+      $data['cart'] = getCartItems();
       break;
     case 'update_cart':
       if (isset($_POST['product_id']) && isset($_POST['quantity']))
@@ -79,6 +77,13 @@ function processRequest($page)
       if (isset($_POST['product_id']))
       {
         removeFromCart($_POST['product_id']);
+      }
+      break;
+    case 'checkout':
+      if (!empty($_SESSION['cart']))
+      {
+        processCheckout();
+        $page = 'webshop';
       }
       break;
     case 'change_password':
@@ -149,6 +154,7 @@ function showHeadSection($data)
   {
     echo "</title>";
     echo "<link rel=\"stylesheet\" href=\"./CSS/stylesheet.css\">";
+    echo "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">";
     echo "</head>";
   }
 }

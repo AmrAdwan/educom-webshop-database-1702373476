@@ -39,10 +39,17 @@ function showshoppingcartContent()
     echo "<input type='submit' value='Remove Item'>";
     echo "</form>";
 
+    echo "<br>";
+
     echo "</div>";
 
     $totalPrice += $item['subtotal'];
   }
+  echo "<form action='index.php' method='post'>";
+  echo "<input type='hidden' name='page' value='checkout'>";
+  // echo "<input type='submit' value='Checkout'>";
+  echo "<button style=\"font-size:24px\"><i class=\"fa fa-shopping-cart\"></i></button>";
+  echo "</form>";
 
   echo "<h3>Total Price: $" . $totalPrice . "</h3>";
 
@@ -127,7 +134,33 @@ function removeFromCart($productId)
   }
 }
 
+function calculateTotalPrice($cartItems)
+{
+  $totalPrice = 0;
+
+  foreach ($cartItems as $item)
+  {
+    $totalPrice += $item['price'] * $item['quantity'];
+  }
+
+  return $totalPrice;
+}
 
 
+function processCheckout()
+{
+  $userId = $_SESSION['user_id'];
+
+  $cartItems = getCartItems();
+  $totalPrice = calculateTotalPrice($cartItems);
+
+  // Call insertOrder to save the order in the database
+  $orderPlaced = insertOrder($userId, $cartItems, $totalPrice);
+
+  if ($orderPlaced)
+  {
+    $_SESSION['cart'] = []; // Empty the cart
+  }
+}
 
 ?>

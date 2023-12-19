@@ -163,7 +163,36 @@ function getProductById($id)
   return $product;
 }
 
+function insertOrder($userId, $cartItems, $totalPrice)
+{
+  global $conn;
 
+  $productNames = [];
+  $quantities = [];
+  foreach ($cartItems as $item)
+  {
+    $productNames[] = $item['name'];
+    $quantities[] = $item['quantity'];
+  }
+  $productNamesStr = implode(", ", $productNames);
+  $quantitiesStr = implode(", ", $quantities);
+
+  $sql = "INSERT INTO orders (user_id, product_names, quantity_per_product, total_price) VALUES (?, ?, ?, ?)";
+  $stmt = mysqli_prepare($conn, $sql);
+
+  if (!$stmt)
+  {
+    die('Statement preparation failed: ' . mysqli_error($conn));
+  }
+
+  // Bind parameters and execute
+  mysqli_stmt_bind_param($stmt, "issd", $userId, $productNamesStr, $quantitiesStr, $totalPrice);
+
+  $success = mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+
+  return $success;
+}
 
 
 // Close the database connection at the end of the script
