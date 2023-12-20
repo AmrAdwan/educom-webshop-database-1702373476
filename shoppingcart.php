@@ -26,11 +26,27 @@ function showshoppingcartContent()
     echo "<p>Subtotal: $" . $item['subtotal'] . "</p>";
 
     // Form for updating quantity
+    // echo "<form onsubmit='handleSubmit(this); return false;' method='post'>";
+    // echo "<input type='hidden' name='page' value='update_cart'>";
+    // echo "<input type='hidden' name='product_id' value='" . $item['id'] . "'>";
+    // echo "<input type='number' name='quantity' value='" . $item['quantity'] . "' min='1'>";
+    // echo "<input type='submit' value='Update Quantity'>";
+    // echo "</form>";
+
+    // Form for updating quantity with plus and minus buttons
     echo "<form onsubmit='handleSubmit(this); return false;' method='post'>";
     echo "<input type='hidden' name='page' value='update_cart'>";
     echo "<input type='hidden' name='product_id' value='" . $item['id'] . "'>";
-    echo "<input type='number' name='quantity' value='" . $item['quantity'] . "' min='1'>";
-    echo "<input type='submit' value='Update Quantity'>";
+
+    // Minus button
+    echo "<button type='button' onclick='changeQuantity(this, -1)'>&minus;</button>";
+
+    // Quantity display
+    echo "<input class='quantity' name='quantity' value='" . $item['quantity'] . "' min='1' readonly>";
+
+    // Plus button
+    echo "<button type='button' onclick='changeQuantity(this, 1)'>&plus;</button>";
+
     echo "</form>";
 
     echo "<br>";
@@ -39,7 +55,6 @@ function showshoppingcartContent()
     echo "<form onsubmit='handleSubmit(this); return false;' method='post'>";
     echo "<input type='hidden' name='page' value='remove_from_cart'>";
     echo "<input type='hidden' name='product_id' value='" . $item['id'] . "'>";
-    // echo "<input type='submit' value='Remove Item'>";
     echo "<button style=\"font-size:24px; color:red\" color><i class=\"material-icons\">delete</i></button>";
     echo "</form>";
 
@@ -51,7 +66,6 @@ function showshoppingcartContent()
   }
   echo "<form action='index.php' method='post'>";
   echo "<input type='hidden' name='page' value='checkout'>";
-  // echo "<input type='submit' value='Checkout'>";
   echo "<button style=\"font-size:24px\"><i class=\"fa fa-shopping-cart\"></i></button>";
   echo "</form>";
 
@@ -73,6 +87,20 @@ function showshoppingcartContent()
        }).catch(error => console.error('Error:', error));
    }
    </script>";
+
+
+  echo "<script>
+    function changeQuantity(button, delta) {
+        var form = button.parentElement;
+        var quantityInput = form.querySelector('input[name=\"quantity\"]');
+        var newQuantity = parseInt(quantityInput.value) + delta;
+        if (newQuantity >= 1) {
+            quantityInput.value = newQuantity;
+            handleSubmit(form); // Submit the form
+        }
+    }
+    </script>";
+
 }
 
 
@@ -151,7 +179,8 @@ function calculateTotalPrice($cartItems)
 }
 
 
-function processCheckout() {
+function processCheckout()
+{
   $userId = $_SESSION['user_id'];
   $cartItems = getCartItems();
   // $totalPrice = calculateTotalPrice($cartItems);
@@ -159,10 +188,11 @@ function processCheckout() {
   // Call insertOrder to save the order in the database
   $orderPlaced = insertOrder($userId, $cartItems);
 
-  if ($orderPlaced) {
-      // echo "<script>alert('Hello!');</script>";
-      echo '<script language="javascript">alert("Order Placed Successfully! Thank you for your order!");</script>';
-      $_SESSION['cart'] = []; // Empty the cart
+  if ($orderPlaced)
+  {
+    // echo "<script>alert('Hello!');</script>";
+    echo '<script language="javascript">alert("Order Placed Successfully! Thank you for your order!");</script>';
+    $_SESSION['cart'] = []; // Empty the cart
   }
 }
 

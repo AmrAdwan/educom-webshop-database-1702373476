@@ -38,6 +38,10 @@ ul.menu li > a {
 .input {
   width: 400px;
 }
+.quantity {
+  width: 2.5%;
+  text-align: center;
+}
 
 label {
   display: inline-block;
@@ -59,7 +63,6 @@ footer {
 .error {
   color: red;
 }
-
 
 .column {
   float: left;
