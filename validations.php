@@ -298,7 +298,7 @@ function validateChangePassword()
     } else
     {
       if (!empty($changeData['old_password']))
-      $errors['old_password'] = 'Incorrect old password.';
+        $errors['old_password'] = 'Incorrect old password.';
     }
   }
   return [
@@ -307,5 +307,86 @@ function validateChangePassword()
     'changeData' => $changeData
   ];
 }
+
+
+function validateAddProduct()
+{
+  $addProductData = [
+    'prodname' => '',
+    'prodprice' => '',
+    'proddescription' => '',
+    'prodimage' => ''
+  ];
+  $errors = [];
+  $addProductvalid = false;
+
+  if ($_SERVER['REQUEST_METHOD'] === 'POST')
+  {
+    // Fetch POST data
+    foreach ($addProductData as $key => &$value)
+    {
+      if ($key != 'prodimage')
+      {
+        $value = $_POST[$key] ?? '';
+      } else
+      {
+        $value = $_FILES[$key] ?? '';
+      }
+    }
+
+    // Validate product name
+    if (empty($addProductData['prodname']))
+    {
+      $errors['prodname'] = 'Product name is required.';
+    }
+
+    // Validate product price
+    if (empty($addProductData['prodprice']) || !is_numeric($addProductData['prodprice']) || $addProductData['prodprice'] < 0)
+    {
+      $errors['prodprice'] = 'Valid product price is required.';
+    }
+
+    // Validate description
+    if (empty($addProductData['proddescription']))
+    {
+      $errors['proddescription'] = 'Product description is required.';
+    }
+
+    // Validate image
+    if (empty($addProductData['prodimage']['name']))
+    {
+      $errors['prodimage'] = 'Product image is required.';
+    } else
+    {
+      // Check for valid image types (PNG, GIF, JPEG) and size (less than 2 MB)
+      $allowedTypes = ['image/png', 'image/gif', 'image/jpeg'];
+      $maxSize = 2 * 1024 * 1024; // 2MB
+
+      if (!in_array($addProductData['prodimage']['type'], $allowedTypes))
+      {
+        $errors['prodimage'] = 'Invalid image type. Allowed types: PNG, GIF, JPEG.';
+      } elseif ($addProductData['prodimage']['size'] > $maxSize)
+      {
+        $errors['prodimage'] = 'Image size too large. Maximum size: 2MB.';
+      }
+    }
+
+    // Check if there are no errors
+    if (empty($errors))
+    {
+      $addProductvalid = true;
+      saveProduct($addProductData['prodname'], $addProductData['proddescription'],
+        $addProductData['prodprice'], $addProductData['prodimage']['name']);
+      // Here, you can handle the file upload and save the product data to the database
+    }
+  }
+
+  return [
+    'addvalid' => $addProductvalid,
+    'addData' => $addProductData,
+    'errors' => $errors
+  ];
+}
+
 
 ?>

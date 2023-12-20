@@ -12,6 +12,7 @@ if (!$conn)
   die("Connection failed: " . mysqli_connect_error());
 }
 
+// users database
 function findUserByEmail($email)
 {
   global $conn;
@@ -89,6 +90,54 @@ function saveUser($email, $name, $password)
   return $success;
 }
 
+// function setAdminStatus($userId, $isAdmin)
+// {
+//   global $conn;
+//   $sql = "UPDATE users SET is_admin = ? WHERE id = ?";
+//   $stmt = mysqli_prepare($conn, $sql);
+//   mysqli_stmt_bind_param($stmt, "ii", $isAdmin, $userId);
+//   $success = mysqli_stmt_execute($stmt);
+//   mysqli_stmt_close($stmt);
+//   return $success;
+// }
+
+function getAdminStatus($userId)
+{
+  global $conn;
+
+  $sql = "SELECT is_admin FROM users WHERE id = ?";
+  $stmt = mysqli_prepare($conn, $sql);
+
+  if (!$stmt)
+  {
+    die('Statement preparation failed: ' . mysqli_error($conn));
+  }
+
+  mysqli_stmt_bind_param($stmt, "i", $userId);
+
+  if (!mysqli_stmt_execute($stmt))
+  {
+    die('Execute failed: ' . mysqli_error($conn));
+  }
+
+  $result = mysqli_stmt_get_result($stmt);
+  $user = mysqli_fetch_assoc($result);
+
+  mysqli_free_result($result);
+  mysqli_stmt_close($stmt);
+
+  if ($user)
+  {
+    return $user['is_admin'] == 1; // Assuming is_admin is a boolean or integer (0 or 1)
+  } else
+  {
+    return false; // User not found
+  }
+}
+
+
+
+// products database
 function getProducts()
 {
   global $conn;
@@ -231,6 +280,31 @@ function getTop5Products()
   return $topProducts;
 }
 
+
+function saveProduct($productName, $productPrice, $productDescription, $imageName)
+{
+  global $conn;
+
+  // Prepare an INSERT statement
+  $sql = "INSERT INTO products (name, price, description, file_name) VALUES (?, ?, ?, ?)";
+  $stmt = mysqli_prepare($conn, $sql);
+
+  if (!$stmt)
+  {
+    die('Statement preparation failed: ' . mysqli_error($conn));
+  }
+
+  // Bind parameters to the prepared statement
+  mysqli_stmt_bind_param($stmt, "sdss", $productName, $productDescription, $productPrice, $imageName);
+
+  // Execute the statement and check for success
+  $success = mysqli_stmt_execute($stmt);
+
+  // Close the statement
+  mysqli_stmt_close($stmt);
+
+  return $success;
+}
 
 
 // Close the database connection at the end of the script

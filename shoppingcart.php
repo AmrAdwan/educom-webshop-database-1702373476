@@ -25,14 +25,6 @@ function showshoppingcartContent()
     echo "<p>Quantity: " . $item['quantity'] . "</p>";
     echo "<p>Subtotal: $" . $item['subtotal'] . "</p>";
 
-    // Form for updating quantity
-    // echo "<form onsubmit='handleSubmit(this); return false;' method='post'>";
-    // echo "<input type='hidden' name='page' value='update_cart'>";
-    // echo "<input type='hidden' name='product_id' value='" . $item['id'] . "'>";
-    // echo "<input type='number' name='quantity' value='" . $item['quantity'] . "' min='1'>";
-    // echo "<input type='submit' value='Update Quantity'>";
-    // echo "</form>";
-
     // Form for updating quantity with plus and minus buttons
     echo "<form onsubmit='handleSubmit(this); return false;' method='post'>";
     echo "<input type='hidden' name='page' value='update_cart'>";

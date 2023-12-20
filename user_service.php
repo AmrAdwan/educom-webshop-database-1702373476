@@ -1,5 +1,4 @@
 <?php
-// Include the data_access_layer.php file
 include 'data_access_layer.php';
 function authenticateUser($email, $password)
 {

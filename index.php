@@ -15,6 +15,7 @@ include 'webshop.php';
 include 'product_details.php';
 include 'shoppingcart.php';
 include 'top5.php';
+include 'add_product.php';
 
 
 function processRequest($page)
@@ -94,6 +95,13 @@ function processRequest($page)
         $page = 'home';
       }
       break;
+    case 'add_product':
+      $data = validateAddProduct();
+      if ($data['addvalid'])
+      {
+        $page = 'webshop';
+      }
+      break;
   }
 
   $data['page'] = $page;
@@ -145,6 +153,9 @@ function showHeadSection($data)
       break;
     case 'top5':
       echo 'Top 5';
+      break;
+    case 'add_product':
+      echo 'Add Product';
       break;
     default:
       echo "404 Not Found";
@@ -201,6 +212,9 @@ function showHeader($data)
     case 'top5':
       echo 'Top 5';
       break;
+    case 'add_product':
+      echo 'Add Product';
+      break;
     default:
       echo '404 Page Not Found';
       break;
@@ -251,6 +265,9 @@ function showContent($data)
     case 'top5':
       showTop5Content();
       break;
+    case 'add_product':
+      showAddProductForm($data);
+      break;
     default:
       show404Content();
       break;
@@ -289,7 +306,8 @@ function getRequestedPage()
 {
   // A list of allowed pages
   $allowedPages = ['home', 'about', 'contact', 'register', 'login', 'logout',
-    'change_password', 'thanks', 'webshop', 'product_details', 'shoppingcart', 'top5'];
+    'change_password', 'thanks', 'webshop', 'product_details', 'shoppingcart',
+    'top5', 'add_product'];
 
   // Check if it's a POST request
   if ($_SERVER['REQUEST_METHOD'] === 'POST')
@@ -309,6 +327,9 @@ function getRequestedPage()
       } elseif ($_POST['form_type'] === 'change_password')
       {
         return 'change_password';
+      } elseif ($_POST['form_type'] === 'add_product')
+      {
+        return 'add_product';
       }
     } elseif (isset($_POST['page']))
     {

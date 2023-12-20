@@ -7,6 +7,14 @@ function doLoginUser($id, $name)
   $_SESSION['user_logged_in'] = true;
   $_SESSION['user_id'] = $id;
   $_SESSION['user_name'] = $name;
+  
+  if (getAdminStatus($id))
+  {
+    $_SESSION['is_admin'] = 1;
+  } else
+  {
+    $_SESSION['is_admin'] = 0;
+  }
 }
 
 function isUserLoggedIn()
@@ -33,6 +41,10 @@ function doLogoutUser()
   session_destroy();
 }
 
+function isUserAdmin()
+{
+  return isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+}
 
 
 function showMenu()
@@ -49,7 +61,7 @@ function showMenu()
   {
     echo "<li><a href=\"index.php?page=shoppingcart\">ShoppingCart</a></li>";
     echo "<li><a href=\"index.php?page=logout\">Logout[";
-    echo getLoggedInUserName()."]";
+    echo getLoggedInUserName() . "]";
     echo "</a></li>";
     echo "<li><a href=\"index.php?page=change_password\">Change Password</a></li>";
   } else
