@@ -297,10 +297,10 @@ function validateChangePassword()
       $changevalid = $updateSuccess;
     } else
     {
+      if (!empty($changeData['old_password']))
       $errors['old_password'] = 'Incorrect old password.';
     }
   }
-
   return [
     'changevalid' => $changevalid,
     'errors' => $errors,

@@ -91,10 +91,8 @@ function processRequest($page)
       $data = validateChangePassword();
       if ($data['changevalid'])
       {
-        echo "<script>alert(\'Password changed successfully!\');</script>";
         $page = 'home';
-      } else
-        echo "<script>alert('Failure!');</script>";
+      }
       break;
   }
 
