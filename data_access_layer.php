@@ -90,17 +90,6 @@ function saveUser($email, $name, $password)
   return $success;
 }
 
-// function setAdminStatus($userId, $isAdmin)
-// {
-//   global $conn;
-//   $sql = "UPDATE users SET is_admin = ? WHERE id = ?";
-//   $stmt = mysqli_prepare($conn, $sql);
-//   mysqli_stmt_bind_param($stmt, "ii", $isAdmin, $userId);
-//   $success = mysqli_stmt_execute($stmt);
-//   mysqli_stmt_close($stmt);
-//   return $success;
-// }
-
 function getAdminStatus($userId)
 {
   global $conn;
@@ -305,6 +294,32 @@ function saveProduct($productName, $productPrice, $productDescription, $imageNam
 
   return $success;
 }
+
+function editProduct($id, $productName, $productPrice, $productDescription, $imageName)
+{
+    global $conn;
+
+    // Prepare an UPDATE statement
+    $sql = "UPDATE products SET name = ?, price = ?, description = ?, file_name = ? WHERE id = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if (!$stmt)
+    {
+        die('Statement preparation failed: ' . mysqli_error($conn));
+    }
+
+    // Bind parameters to the prepared statement
+    mysqli_stmt_bind_param($stmt, "sdssi", $productName, $productPrice, $productDescription, $imageName, $id);
+
+    // Execute the statement and check for success
+    $success = mysqli_stmt_execute($stmt);
+
+    // Close the statement
+    mysqli_stmt_close($stmt);
+
+    return $success;
+}
+
 
 
 // Close the database connection at the end of the script

@@ -17,15 +17,15 @@ function doesEmailExist($email)
     return $user !== null; // Returns true if user exists, false otherwise
 }
 
-function storeUser($email, $name, $password)
-{
-    // global $conn; // Use the global connection variable
-    // Check if the email already exists
-    if (!doesEmailExist($email)) {
-        return saveUser($email, $name, $password);
-    }
-    return false; // Email already exists
-}
+// function storeUser($email, $name, $password)
+// {
+//     // global $conn; // Use the global connection variable
+//     // Check if the email already exists
+//     if (!doesEmailExist($email)) {
+//         return true;
+//     }
+//     return false; // Email already exists
+// }
 
 
 function updateUserPassword($email, $hashedPassword) {

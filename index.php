@@ -16,6 +16,7 @@ include 'product_details.php';
 include 'shoppingcart.php';
 include 'top5.php';
 include 'add_product.php';
+include 'edit_product.php';
 
 
 function processRequest($page)
@@ -45,6 +46,8 @@ function processRequest($page)
       $data = validateRegister();
       if ($data['regvalid'])
       {
+        $registerData = $data['registerData'];
+        saveUser($registerData['regemail'], $registerData['regname'], $registerData['regpassword1']);
         $page = 'login';
       }
       break;
@@ -92,6 +95,12 @@ function processRequest($page)
       $data = validateChangePassword();
       if ($data['changevalid'])
       {
+        $id = $_SESSION['user_id'];
+        $email = findEmailById($id);
+        $changeData = $data['changeData'];
+
+        $hashedPassword = password_hash($changeData['new_password'], PASSWORD_DEFAULT);
+        updateUserPassword($email, $hashedPassword);
         $page = 'home';
       }
       break;
@@ -99,7 +108,29 @@ function processRequest($page)
       $data = validateAddProduct();
       if ($data['addvalid'])
       {
+        $addProductData = $data['addData'];
+        saveProduct($addProductData['prodname'], $addProductData['proddescription'],
+        $addProductData['prodprice'], $addProductData['prodimage']['name']);
         $page = 'webshop';
+      }
+      break;
+    case 'edit_product':
+      if (isset($_GET['product_id'])|| isset($_POST['product_id']))
+      {
+        $productId = $_GET['product_id'] ?? $_POST['product_id'];
+        $product = getProductById($productId);
+        if ($product)
+        {
+          $data['product'] = $product;
+          $data = validaEditProduct($product);
+          if ($data['editvalid'])
+          {
+            $editData = $data['editData'];
+            editProduct($editData['editid'], $editData['editname'], $editData['editprice'], $editData['editdescription'],
+            $editData['editimage']);
+            $page = 'webshop';
+          }
+        }
       }
       break;
   }
@@ -156,6 +187,9 @@ function showHeadSection($data)
       break;
     case 'add_product':
       echo 'Add Product';
+      break;
+    case 'edit_product':
+      echo 'Edit Product';
       break;
     default:
       echo "404 Not Found";
@@ -215,6 +249,9 @@ function showHeader($data)
     case 'add_product':
       echo 'Add Product';
       break;
+    case 'edit_product':
+      echo 'Edit Product';
+      break;
     default:
       echo '404 Page Not Found';
       break;
@@ -268,6 +305,12 @@ function showContent($data)
     case 'add_product':
       showAddProductForm($data);
       break;
+    case 'edit_product':
+      if (isset($data))
+      {
+        showEditProductForm($data);
+      }
+      break;
     default:
       show404Content();
       break;
@@ -307,31 +350,13 @@ function getRequestedPage()
   // A list of allowed pages
   $allowedPages = ['home', 'about', 'contact', 'register', 'login', 'logout',
     'change_password', 'thanks', 'webshop', 'product_details', 'shoppingcart',
-    'top5', 'add_product'];
+    'top5', 'add_product', 'edit_product'];
 
   // Check if it's a POST request
   if ($_SERVER['REQUEST_METHOD'] === 'POST')
   {
-    // Check the form_type field to determine which form was submitted
-    if (isset($_POST['form_type']))
-    {
-      if ($_POST['form_type'] === 'register')
-      {
-        return 'register';
-      } else if ($_POST['form_type'] === 'contact')
-      {
-        return 'contact';
-      } else if ($_POST['form_type'] === 'login')
-      {
-        return 'login';
-      } elseif ($_POST['form_type'] === 'change_password')
-      {
-        return 'change_password';
-      } elseif ($_POST['form_type'] === 'add_product')
-      {
-        return 'add_product';
-      }
-    } elseif (isset($_POST['page']))
+    // Check the page field to determine which form was submitted
+    if (isset($_POST['page']))
     {
       return $_POST['page'];
     }

@@ -15,7 +15,7 @@ function showContactForm($formResult)
     echo "<!-- Hidden field to identify the contact form -->";
     echo "<br>";
     echo "<br>";
-    echo "<input type=\"hidden\" name=\"form_type\" value=\"contact\">";
+    echo "<input type=\"hidden\" name=\"page\" value=\"contact\">";
     echo "<select name=\"gender\" id=\"gender\" class=\"select\">";
     echo "<option value=\"\">-Select your Gender-</option>";
     echo "<option value=\"male\"";

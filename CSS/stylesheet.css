@@ -76,3 +76,14 @@ footer {
   clear: both;
   display: table;
 }
+
+.btn-block{
+  width: 80%;
+  align-content: center;
+  align-self: center;
+}
+.btn-primary{
+  background-color: rgb(42, 160, 228);
+  color: white;
+  cursor: pointer;
+}

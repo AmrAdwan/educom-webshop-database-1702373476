@@ -1,5 +1,4 @@
 <?php
-// include ("validations.php");
 function getErrorLogin($loginResult, $key)
 {
   return isset($loginResult['errors'][$key]) ? $loginResult['errors'][$key] : '';
@@ -13,7 +12,7 @@ function showLoginForm($loginResult)
     echo "<div class=\"formcarry-container\">";
     echo "<form action=\"index.php\" method=\"POST\" class=\"formcarry-form\">";
     echo "<!-- Hidden field to identify the login form -->";
-    echo "<input type=\"hidden\" name=\"form_type\" value=\"login\">";
+    echo "<input type=\"hidden\" name=\"page\" value=\"login\">";
     echo "<div class=\"input\">";
     echo "<br>";
     echo "<br>";

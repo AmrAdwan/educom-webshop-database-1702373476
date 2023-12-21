@@ -13,7 +13,7 @@ function showChangePasswordForm($changeResult)
     echo "<div class=\"formcarry-container\">";
     echo "<form action=\"index.php\" method=\"post\" class=\"formcarry-form\">";
     echo "<!-- Hidden field to identify the change_password form -->";
-    echo "<input type=\"hidden\" name=\"form_type\" value=\"change_password\">";
+    echo "<input type=\"hidden\" name=\"page\" value=\"change_password\">";
     echo "<label for=\"old_password\">Old Password:</label>";
     echo "<input type=\"password\" id=\"old_password\" name=\"old_password\">";
     echo "<br>";

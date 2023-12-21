@@ -28,9 +28,6 @@ function getVar($key, $default = '')
   return $default;
 }
 
-
-
-
 function validateLogin()
 {
   $loginData = [
@@ -140,8 +137,8 @@ function validateRegister()
 
     if (empty($errors))
     {
-      // Use storeUser function from user_service.php
-      $regvalid = storeUser($registerData['regemail'], $registerData['regname'], $registerData['regpassword1']);
+      // check if user email already exists
+      $regvalid = !doesEmailExist($registerData['regemail']);
       if (!$regvalid)
       {
         $errors['regemail'] = "Email already exists!";
@@ -291,10 +288,7 @@ function validateChangePassword()
 
     if ($user && password_verify($changeData['old_password'], $user['password']))
     {
-      // Update password
-      $hashedPassword = password_hash($changeData['new_password'], PASSWORD_DEFAULT);
-      $updateSuccess = updateUserPassword($email, $hashedPassword);
-      $changevalid = $updateSuccess;
+      $changevalid = true;
     } else
     {
       if (!empty($changeData['old_password']))
@@ -313,8 +307,8 @@ function validateAddProduct()
 {
   $addProductData = [
     'prodname' => '',
-    'prodprice' => '',
     'proddescription' => '',
+    'prodprice' => '',
     'prodimage' => ''
   ];
   $errors = [];
@@ -375,15 +369,85 @@ function validateAddProduct()
     if (empty($errors))
     {
       $addProductvalid = true;
-      saveProduct($addProductData['prodname'], $addProductData['proddescription'],
-        $addProductData['prodprice'], $addProductData['prodimage']['name']);
-      // Here, you can handle the file upload and save the product data to the database
     }
   }
 
   return [
     'addvalid' => $addProductvalid,
     'addData' => $addProductData,
+    'errors' => $errors
+  ];
+}
+
+function validaEditProduct($product)
+{
+  $editProductData = [
+    'editid' => $product['id'],
+    'editname' => $product['name'],
+    'editdescription' => $product['description'],
+    'editprice' => $product['price'],
+    'editimage' => $product['file_name']
+  ];
+  $errors = [];
+  $editProductvalid = false;
+
+  if ($_SERVER['REQUEST_METHOD'] === 'POST')
+  {
+
+    // Update with submitted data
+    $editProductData = [
+      'editid' => $_POST['editid'] ?? $product['id'],
+      'editname' => $_POST['editname'] ?? $product['name'],
+      'editdescription' => $_POST['editdescription'] ?? $product['description'],
+      'editprice' => $_POST['editprice'] ?? $product['price'],
+      'editimage' => $_FILES['editimage']['name'] ?? $product['file_name']
+    ];
+
+    // Validate product name
+    if (empty($editProductData['editname']))
+    {
+      $errors['editname'] = 'Product name is required.';
+    }
+
+    // Validate product price
+    if (empty($editProductData['editprice']) || !is_numeric($editProductData['editprice']) || $editProductData['editprice'] < 0)
+    {
+      $errors['editprice'] = 'Valid product price is required.';
+    }
+
+    // Validate description
+    if (empty($editProductData['editdescription']))
+    {
+      $errors['editdescription'] = 'Product description is required.';
+    }
+
+    // Validate image if a new image is being uploaded
+    if ($editProductData['editimage'] && $editProductData['editimage'] !== $product['file_name'])
+    {
+      // Check for valid image types (PNG, GIF, JPEG) and size (less than 2 MB)
+      $allowedTypes = ['image/png', 'image/gif', 'image/jpeg'];
+      $maxSize = 2 * 1024 * 1024; // 2MB
+
+      if (!in_array($editProductData['editimage']['type'], $allowedTypes))
+      {
+        $errors['editimage'] = 'Invalid image type. Allowed types: PNG, GIF, JPEG.';
+      } elseif ($editProductData['editimage']['size'] > $maxSize)
+      {
+        $errors['editimage'] = 'Image size too large. Maximum size: 2MB.';
+      }
+    }
+
+    // Check if there are no errors
+    if (empty($errors))
+    {
+      $editProductvalid = true;
+      $editProductData['editimage'] = $editProductData['editimage'] ?? $product['file_name'];
+    }
+  }
+
+  return [
+    'editvalid' => $editProductvalid,
+    'editData' => $editProductData,
     'errors' => $errors
   ];
 }

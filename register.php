@@ -13,7 +13,7 @@ function showRegisterForm($registerResult)
     echo "<div class=\"formcarry-container\">";
     echo "<form action=\"index.php\" method=\"POST\" class=\"formcarry-form\">";
     echo "<!-- Hidden field to identify the register form -->";
-    echo "<input type=\"hidden\" name=\"form_type\" value=\"register\">";
+    echo "<input type=\"hidden\" name=\"page\" value=\"register\">";
     echo "<div class=\"input\">";
     echo "<br>";
     echo "<br>";
