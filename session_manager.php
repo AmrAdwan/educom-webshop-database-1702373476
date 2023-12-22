@@ -46,32 +46,10 @@ function isUserAdmin()
   return isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
 }
 
-
-function showMenu()
+function showMenuItem($link,$label)
 {
-  echo "<nav>
-    <ul class=\"menu\">
-    <li><a href=\"index.php?page=home\">Home</a></li>
-    <li><a href=\"index.php?page=about\">About</a></li>
-    <li><a href=\"index.php?page=contact\">Contact</a></li>
-    <li><a href=\"index.php?page=webshop\">Webshop</a></li>
-    <li><a href=\"index.php?page=top5\">Top 5</a></li>";
-
-  if (isUserLoggedIn())
-  {
-    echo "<li><a href=\"index.php?page=shoppingcart\">ShoppingCart</a></li>";
-    echo "<li><a href=\"index.php?page=logout\">Logout[";
-    echo getLoggedInUserName() . "]";
-    echo "</a></li>";
-    echo "<li><a href=\"index.php?page=change_password\">Change Password</a></li>";
-  } else
-  {
-    echo "<li><a href=\"index.php?page=register\">Register</a></li>
-      <li><a href=\"index.php?page=login\">Login</a></li>";
-  }
-  ;
-  echo "</ul>
-</nav>";
+  echo "<li><a href=\"index.php?page=$link\">$label</a></li>";
 }
+
 
 ?>

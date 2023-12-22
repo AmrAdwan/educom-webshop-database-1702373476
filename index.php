@@ -110,12 +110,12 @@ function processRequest($page)
       {
         $addProductData = $data['addData'];
         saveProduct($addProductData['prodname'], $addProductData['proddescription'],
-        $addProductData['prodprice'], $addProductData['prodimage']['name']);
+          $addProductData['prodprice'], $addProductData['prodimage']['name']);
         $page = 'webshop';
       }
       break;
     case 'edit_product':
-      if (isset($_GET['product_id'])|| isset($_POST['product_id']))
+      if (isset($_GET['product_id']) || isset($_POST['product_id']))
       {
         $productId = $_GET['product_id'] ?? $_POST['product_id'];
         $product = getProductById($productId);
@@ -127,13 +127,33 @@ function processRequest($page)
           {
             $editData = $data['editData'];
             editProduct($editData['editid'], $editData['editname'], $editData['editprice'], $editData['editdescription'],
-            $editData['editimage']);
+              $editData['editimage']);
             $page = 'webshop';
           }
         }
       }
       break;
   }
+
+  $data['menu'] = array(
+    'home' => 'Home',
+    'about' => 'About',
+    'contact' => 'Contact',
+    'webshop' => 'Webshop',
+    'top5' => 'Top 5'
+  );
+
+  if (isUserLoggedIn())
+  {
+    $data['menu']['shoppingcart'] = 'ShoppingCart';
+    $data['menu']['logout'] = 'Logout[' . getLoggedInUserName() . ']';
+    $data['menu']['change_password'] = 'Change Password';
+  } else
+  {
+    $data['menu']['register'] = 'Register';
+    $data['menu']['login'] = 'Login';
+  }
+
 
   $data['page'] = $page;
   return $data;
@@ -259,6 +279,18 @@ function showHeader($data)
   echo "</h1>";
 }
 
+function showNavMenu($data)
+{
+  echo '<nav>' . PHP_EOL;
+  echo '<ul class="menu">' . PHP_EOL;
+  foreach ($data['menu'] as $link => $label)
+  {
+    showMenuItem($link, $label);
+  }
+  echo '</ul>' . PHP_EOL;
+  echo '</nav>' . PHP_EOL;
+}
+
 function showContent($data)
 {
   switch ($data['page'])
@@ -331,7 +363,7 @@ function showBodySection($data)
   if ($data['page'] !== "404")
   {
     echo "<div class=\"text\">";
-    showMenu();
+    showNavMenu($data);
   }
   showContent($data);
   echo "</div>";
